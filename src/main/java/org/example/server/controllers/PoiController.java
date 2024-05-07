@@ -2,8 +2,10 @@ package org.example.server.controllers;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.server.mapper.PoiMapper;
 import org.example.server.vo.PoiVo;
 import org.example.server.vo.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -14,6 +16,9 @@ import java.util.List;
 @RequestMapping("/poi")
 @Slf4j
 public class PoiController {
+
+    @Autowired
+    private PoiMapper poiMapper;
 
     @GetMapping("/list")
     public Result<List<PoiVo>> list(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
