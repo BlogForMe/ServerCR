@@ -1,8 +1,9 @@
 package org.example.server.controllers;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.example.server.mapper.PoiMapper;
 import org.example.server.pojo.Poi;
 import org.example.server.service.IPoiService;
 import org.example.server.vo.PoiVo;
@@ -10,6 +11,7 @@ import org.example.server.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,23 +29,21 @@ public class PoiController {
     IPoiService poiService;
 
     @GetMapping("/list")
-    public Result<List<PoiVo>> list(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+    public Result list(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
         log.info("my info , pageNum ={}  pageSize ={}", pageNum, pageSize);
-//        var poiVo1 = new PoiVo();
-//        poiVo1.name ="list";
-//        poiVo1.description = "this is detail";
-//
-//        var poiVo2 = new PoiVo();
-//        poiVo2.name ="list";
-//        poiVo2.description = "this is detail";
-//        ArrayList<PoiVo> poiVos = new ArrayList<>();
-//        poiVos.add(poiVo1);
-//        poiVos.add(poiVo2);
-//        Result<List<PoiVo>> poiVoResult = new Result<>();
-//        poiVoResult.msg="success";
-//        poiVoResult.code=0;
-//        poiVoResult.data = poiVos;
-        return null;
+        Page page = new Page(pageNum, pageSize);
+        IPage pageResult = poiService.page(page);
+        List<Poi> poiList = pageResult.getRecords();
+        List<PoiVo> poiVos = new ArrayList<>();
+        for (Poi poi : poiList) {
+            PoiVo poiVo = new PoiVo();
+            poiVo.id = poi.id;
+            poiVo.name = poi.name;
+            poiVo.description = poi.description;
+            poiVos.add(poiVo);
+        }
+        pageResult.setRecords(poiVos);
+        return Result.success(pageResult);
     }
 
 
