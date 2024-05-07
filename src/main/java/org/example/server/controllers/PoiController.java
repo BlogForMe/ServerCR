@@ -8,6 +8,7 @@ import org.example.server.pojo.Poi;
 import org.example.server.service.IPoiService;
 import org.example.server.vo.PoiVo;
 import org.example.server.vo.Result;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +38,11 @@ public class PoiController {
         List<PoiVo> poiVos = new ArrayList<>();
         for (Poi poi : poiList) {
             PoiVo poiVo = new PoiVo();
-            poiVo.id = poi.id;
-            poiVo.name = poi.name;
-            poiVo.description = poi.description;
+//            poiVo.id = poi.id;
+//            poiVo.name = poi.name;
+//            poiVo.description = poi.description;
+
+            BeanUtils.copyProperties(poi,poiVo);
             poiVos.add(poiVo);
         }
         pageResult.setRecords(poiVos);
