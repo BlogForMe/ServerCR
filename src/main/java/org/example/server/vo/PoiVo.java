@@ -1,5 +1,8 @@
 package org.example.server.vo;
 
+import lombok.Data;
+
+@Data
 public class PoiVo {
     public Integer id;
     public String name;
