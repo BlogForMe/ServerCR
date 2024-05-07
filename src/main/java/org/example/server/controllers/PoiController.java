@@ -4,6 +4,7 @@ package org.example.server.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.example.server.mapper.PoiMapper;
 import org.example.server.pojo.Poi;
+import org.example.server.service.IPoiService;
 import org.example.server.vo.PoiVo;
 import org.example.server.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,14 @@ import java.util.List;
 @RequestMapping("/poi")
 @Slf4j
 public class PoiController {
-
+/*
+    //方式1 : 通过map直接调用
     @Autowired
-    private PoiMapper poiMapper;
+    private PoiMapper poiMapper;*/
+
+    //方式2 : 通过service调用map
+    @Autowired
+    IPoiService poiService;
 
     @GetMapping("/list")
     public Result<List<PoiVo>> list(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
@@ -49,15 +55,8 @@ public class PoiController {
     @GetMapping("/detail/{id}")
     public Result<Poi> detail(@PathVariable int id) {
         log.info("poi detail , id={}", id);
-//        var poiVo = new PoiVo();
-//        poiVo.name ="list";
-//        poiVo.description = "this is detail";
-//
-//        Result<PoiVo> poiVoResult = new Result<>();
-//        poiVoResult.msg="success";
-//        poiVoResult.code=0;
-
-        Poi poi = poiMapper.selectById(id);
+//        Poi poi = poiMapper.selectById(id); // 方式1
+        Poi poi = poiService.getById(id); // 方式2
         return Result.success(poi);
     }
 
