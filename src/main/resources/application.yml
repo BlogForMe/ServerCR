@@ -5,3 +5,7 @@ spring:
     password: ab654321
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+# 之前多了这个配置，导致启动的问题
+#application:
+#  name: Server
