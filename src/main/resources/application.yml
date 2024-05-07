@@ -3,7 +3,7 @@ application:
   name: Server
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/colleage_poi
+    url: jdbc:mysql://127.0.0.1:3306/colleage_poi?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: ab654321
     driver-class-name: com.mysql.cj.jdbc.Driver
