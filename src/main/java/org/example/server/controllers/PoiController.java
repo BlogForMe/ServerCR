@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -35,16 +36,12 @@ public class PoiController {
         Page page = new Page(pageNum, pageSize);
         IPage pageResult = poiService.page(page);
         List<Poi> poiList = pageResult.getRecords();
-        List<PoiVo> poiVos = new ArrayList<>();
-        for (Poi poi : poiList) {
+        List<PoiVo> poiVos= (List<PoiVo>) pageResult.getRecords().stream().map(poi -> {
             PoiVo poiVo = new PoiVo();
-//            poiVo.id = poi.id;
-//            poiVo.name = poi.name;
-//            poiVo.description = poi.description;
+            BeanUtils.copyProperties(poi, poiVo);
+            return poiVo;
+        }).collect(Collectors.toList());
 
-            BeanUtils.copyProperties(poi,poiVo);
-            poiVos.add(poiVo);
-        }
         pageResult.setRecords(poiVos);
         return Result.success(pageResult);
     }
@@ -52,6 +49,7 @@ public class PoiController {
 
     /**
      * http://localhost:8080/poi/detail/1
+     *
      * @param id = 1
      * @return
      */
@@ -66,14 +64,14 @@ public class PoiController {
 
     @PostMapping("/add")
     public String add(@RequestBody PoiVo poi) {
-        log.info("poi add ,name={}",poi.name);
+        log.info("poi add ,name={}", poi.name);
         return "this is add";
     }
 
 
     @PutMapping("/edit")
     public String edit(@RequestBody PoiVo poi) {
-        log.info("poi add ,name={} description={}" ,poi.name,poi.description);
+        log.info("poi add ,name={} description={}", poi.name, poi.description);
         return "this is edit";
     }
 
