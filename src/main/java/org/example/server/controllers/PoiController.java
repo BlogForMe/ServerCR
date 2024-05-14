@@ -10,8 +10,11 @@ import org.example.server.vo.PoiVo;
 import org.example.server.vo.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +49,17 @@ public class PoiController {
         return Result.success(pageResult);
     }
 
+    @GetMapping("/response/headers")
+    public ResponseEntity<String> usingResponseEntityBuilderAndHttpHeaders() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Baeldung-Example-Header",
+                "Value-ResponseEntityBuilderWithHttpHeaders");
+
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body("Response with header using ResponseEntity");
+    }
+
 
     /**
      * http://localhost:8080/poi/detail/1
@@ -54,9 +68,10 @@ public class PoiController {
      * @return
      */
     @GetMapping("/detail/{id}")
-    public Result<Poi> detail(@PathVariable int id) {
+    public Result<Poi> detail(@PathVariable int id, HttpServletResponse response) {
         log.info("poi detail , id={}", id);
 //        Poi poi = poiMapper.selectById(id); // 方式1
+        response.addHeader("Baeldung-Example-Header", "Value-HttpServletResponse");
         Poi poi = poiService.getById(id); // 方式2
         return Result.success(poi);
     }
