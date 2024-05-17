@@ -39,7 +39,7 @@ public class PoiController {
         Page page = new Page(pageNum, pageSize);
         IPage pageResult = poiService.page(page);
         List<Poi> poiList = pageResult.getRecords();
-        List<PoiVo> poiVos= (List<PoiVo>) pageResult.getRecords().stream().map(poi -> {
+        List<PoiVo> poiVos = (List<PoiVo>) pageResult.getRecords().stream().map(poi -> {
             PoiVo poiVo = new PoiVo();
             BeanUtils.copyProperties(poi, poiVo);
             return poiVo;
@@ -77,9 +77,23 @@ public class PoiController {
     }
 
 
+    @PostMapping("/detail/post")
+    public Result<Poi> postDetail(@RequestBody PoiVo poiVo, HttpServletResponse response) {
+        log.info("poi detail , id={}", poiVo);
+//        Poi poi = poiMapper.selectById(id); // 方式1
+        response.addHeader("Baeldung-Example-Header", "Value-HttpServletResponse");
+        Poi poi = poiService.getById(poiVo.id); // 方式2
+        return Result.success(poi);
+    }
+
+
     @PostMapping("/add")
-    public String add(@RequestBody PoiVo poi) {
-        log.info("poi add ,name={}", poi.name);
+    public String add(@RequestBody PoiVo poiVo) {
+        log.info("poi add ,name={}", poiVo.name);
+        Poi poi = new Poi();
+        poi.setCoverUrl("https://raw.githubusercontent.com/BlogForMe/ImageServer/main/OKHTTP/image-20211122164303152.png");
+        BeanUtils.copyProperties(poiVo, poi);
+        poiService.save(poi);
         return "this is add";
     }
 
