@@ -81,7 +81,7 @@ public class PoiController {
     public Result<Poi> postDetail(@RequestBody PoiVo poiVo, HttpServletResponse response) {
         log.info("poi detail , id={}", poiVo);
 //        Poi poi = poiMapper.selectById(id); // 方式1
-        response.addHeader("Baeldung-Example-Header", "Value-HttpServletResponse");
+//        response.addHeader("Baeldung-Example-Header", "Value-HttpServletResponse");
         Poi poi = poiService.getById(poiVo.id); // 方式2
         return Result.success(poi);
     }
